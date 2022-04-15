@@ -2,6 +2,7 @@
 import { onMounted, ref, TransitionGroup } from 'vue'
 import _shuffle from 'lodash.shuffle'
 
+const maskShow = ref(false)
 const cells = ref(Array.from({ length: 25 }, (_, index) => index + 1))
 
 const shuffle = () => {
@@ -9,7 +10,11 @@ const shuffle = () => {
 }
 
 const print = () => {
-  window.print()
+  if (/MicroMessenger/i.test(window.navigator.userAgent)) {
+    maskShow.value = true
+  } else {
+    window.print()
+  }
 }
 
 onMounted(() => {
@@ -21,16 +26,16 @@ onMounted(() => {
   <div
     class="print:w-full print:pt-1/4 flex flex-col h-screen mx-auto max-w-full w-100 md:w-112 lg:w-124 pt-4 md:pt-5 lg:pt-6 relative"
   >
-    <TransitionGroup name="cell" tag="div" class="flex flex-wrap px-4 print:px-1/9">
+    <TransitionGroup name="cell" tag="div" class="flex flex-wrap px-4 print:px-1/9 iphone6:px-9">
       <div
         v-for="cell in cells"
         :key="cell"
-        class="cell w-1/5 aspect-square inline-flex items-center justify-center text-base md:text-xl lg:text-2xl print:text-2xl"
+        class="cell relative w-1/5 inline-flex items-center justify-center text-base md:text-xl lg:text-2xl print:text-2xl"
       >
-        {{ cell }}
+        <span class="absolute left-0 top-0 w-full h-full inline-flex items-center justify-center">{{ cell }}</span>
       </div>
     </TransitionGroup>
-    <div class="hidden print:flex items-end fixed right-4 bottom-4">
+    <div class="hidden print:flex items-end absolute right-4 bottom-4">
       日期：<span class="input-line mr-6"></span> 用时：<span class="input-line"></span>
     </div>
     <div
@@ -57,6 +62,15 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <!-- 微信打印提示 -->
+    <div
+      v-if="maskShow"
+      class="fixed left-0 top-0 right-0 bottom-0 z-10 bg-[rgba(0,0,0,0.75)] text-white p-4"
+      @click="maskShow = false"
+    >
+      <p class="text-right">因为微信浏览器限制无法打印</p>
+      <p class="text-right">你可以点击菜单，选择浏览器中打开，即可打印</p>
+    </div>
   </div>
 </template>
 
@@ -65,6 +79,13 @@ onMounted(() => {
   border: 1px solid #aaa;
   margin-right: -1px;
   margin-bottom: -1px;
+}
+.cell::after {
+  content: '';
+  width: 1px;
+  height: 0;
+  padding-bottom: 100%;
+  z-index: -1;
 }
 .cell-move {
   transition: transform 1s;

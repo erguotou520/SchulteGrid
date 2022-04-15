@@ -5,6 +5,7 @@ export default defineConfig({
   darkMode: 'class',
   theme: {
     screens: {
+      iphone6: '375px',
       print: { raw: 'print' }
     }
   },

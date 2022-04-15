@@ -8,4 +8,8 @@ import SchulteGrid from './components/SchulteGrid.vue'
   <SchulteGrid />
 </template>
 
-<style></style>
+<style>
+body {
+  height: 100%;
+}
+</style>
