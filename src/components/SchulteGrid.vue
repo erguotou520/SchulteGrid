@@ -35,7 +35,7 @@ onMounted(() => {
         <span class="absolute left-0 top-0 w-full h-full inline-flex items-center justify-center">{{ cell }}</span>
       </div>
     </TransitionGroup>
-    <div class="hidden print:flex items-end absolute right-4 bottom-4">
+    <div class="hidden print:flex justify-end mt-1/6 pr-1/9">
       日期：<span class="input-line mr-6"></span> 用时：<span class="input-line"></span>
     </div>
     <div
